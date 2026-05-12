@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+httpx # alternative to requests but its async
+pydantic-settings
+prometheus-fastapi-instrumentator. # for metrics
+sqlalchemy[asyncio] # for async database operations
+alembic # for database migrations
+asyncpg # async postgres driver
+celery
+redis # for celery broker
+
+
