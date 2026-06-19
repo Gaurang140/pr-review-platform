@@ -1,0 +1,16 @@
+name: Local Deploy (kind)
+
+# runs on the self-hosted runner and deploys to the local kind cluster.
+# the aws pipeline (service-ci.yml) is untouched - this is the local equivalent.
+on:
+  push:
+    branches: [main, local-aws-replica]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: build and deploy to local kind
+        run: bash local/deploy.sh

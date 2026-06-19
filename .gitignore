@@ -235,11 +235,3 @@ debug.log
 local_settings.py
 /infra/k8s/secret.yaml
 
-
-
-# apply this secret.yaml to cluster or inject 
-# if you want to securly manage secrets in k8s cluster you can use 
-vault_manager is more safe and secure way to manage secrets in k8s cluster
-
-# now lets say what about dockerfile and docker-compose files, should we ignore them or not?
-# if you are using docker for local development and you want to keep your dockerfile and docker

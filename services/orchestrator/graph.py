@@ -1,13 +1,21 @@
 import json
 import operator
+import os
 import re
 from typing import TypedDict, Annotated
 
-from langfuse.openai import OpenAI
+if os.environ.get("LANGFUSE_PUBLIC_KEY"):
+    from langfuse.openai import OpenAI
+else:
+    from openai import OpenAI
 from langgraph.graph import StateGraph, END
 from langgraph.constants import Send
 
-client = OpenAI()
+client = OpenAI(
+    base_url=os.environ.get("OPENAI_BASE_URL", "https://api.groq.com/openai/v1"),
+    api_key=os.environ.get("GROQ_API_KEY") or os.environ.get("OPENAI_API_KEY") or "not-set",
+)
+REVIEW_MODEL = os.environ.get("REVIEW_MODEL", "llama-3.3-70b-versatile")
 
 PROMPTS = {
     "static_analysis": "You are a static analysis tool. Review this git diff for code complexity issues, unused variables, and poor naming. Return only a JSON array. Each item must have keys: file, line, severity (info/warning/error), message.",
@@ -37,7 +45,7 @@ def make_node(agent_name: str, get_prompt):
     def node(state: GraphState) -> dict:
         prompt = get_prompt(state) if callable(get_prompt) else get_prompt
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model=REVIEW_MODEL,
             messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": state["diff"]},

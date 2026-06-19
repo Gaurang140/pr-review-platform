@@ -2,4 +2,4 @@ fastapi
 uvicorn 
 httpx # alternative to requests but its async
 pydantic-settings
-prometheus-fastapi-instrumentator. # for metrics
+prometheus-fastapi-instrumentator  # for metrics

@@ -1,6 +1,6 @@
-from pydentic_settings import BaseSettings
+from pydantic_settings import BaseSettings
 
-class settings(BaseSettings):
+class Settings(BaseSettings):
     github_webhook_secret: str = ""
 
     class Config:
