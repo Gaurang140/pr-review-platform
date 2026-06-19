@@ -1,4 +1,4 @@
-# PR Review Platform — AWS Deployment
+# AI Code Reviewer — AWS Deployment
 
 This is the full guide for running the platform on AWS the way it was designed: EKS for the
 services, RDS for Postgres, ElastiCache for Redis, ECR for images, and GitHub Actions doing
@@ -168,12 +168,12 @@ cd infra/terraform
 terraform init
 
 terraform plan \
-  -var="cluster_name=pr-review-platform" \
+  -var="cluster_name=ai-code-reviewer" \
   -var="db_password=CHANGE_ME_strong_password" \
   -var="environment=production"
 
 terraform apply \
-  -var="cluster_name=pr-review-platform" \
+  -var="cluster_name=ai-code-reviewer" \
   -var="db_password=CHANGE_ME_strong_password" \
   -var="environment=production"
 ```
@@ -198,7 +198,7 @@ ECR repos are fixed by the config.
 This is the identity the bot uses to read diffs and post reviews.
 
 1. GitHub → Settings → Developer settings → GitHub Apps → **New GitHub App**
-2. Name it (e.g. `PR Review Platform`)
+2. Name it (e.g. `AI Code Reviewer`)
 3. Webhook URL: put a placeholder for now (e.g. `https://example.com`) — the real URL doesn't
    exist until the ingress is up in Step 7, you'll come back and fix it in Step 9
 4. Webhook secret: generate one with `openssl rand -hex 32` and keep it
@@ -219,7 +219,7 @@ Repo → Settings → Secrets and variables → Actions. Add exactly these three
 |---|---|
 | `AWS_ROLE_ARN` | the `github-actions-ai-reviewer` ARN from Step 1 |
 | `AWS_ACCOUNT_ID` | your 12-digit account ID |
-| `EKS_CLUSTER_NAME` | `pr-review-platform` |
+| `EKS_CLUSTER_NAME` | `ai-code-reviewer` |
 
 Nothing else goes here. The app credentials, database URL and LLM key live in a Kubernetes
 secret instead (Step 6), not in GitHub.
@@ -229,7 +229,7 @@ secret instead (Step 6), not in GitHub.
 ## Step 5 — Connect kubectl to the cluster
 
 ```bash
-aws eks update-kubeconfig --name pr-review-platform --region us-east-1
+aws eks update-kubeconfig --name ai-code-reviewer --region us-east-1
 kubectl get nodes
 ```
 
@@ -309,7 +309,7 @@ helm repo add eks https://aws.github.io/eks-charts && helm repo update
 
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   -n kube-system \
-  --set clusterName=pr-review-platform \
+  --set clusterName=ai-code-reviewer \
   --set serviceAccount.create=true
 ```
 
@@ -478,7 +478,7 @@ kubectl delete -k infra/k8s/overlays/aws
 
 cd infra/terraform
 terraform destroy \
-  -var="cluster_name=pr-review-platform" \
+  -var="cluster_name=ai-code-reviewer" \
   -var="db_password=CHANGE_ME_strong_password" \
   -var="environment=production"
 ```
