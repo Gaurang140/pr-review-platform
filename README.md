@@ -1,4 +1,4 @@
-# AI Code Reviewer
+# PR Review Platform
 
 An agentic code review system that reviews GitHub pull requests automatically. When a PR is
 opened, a LangGraph multi-agent workflow reads the diff, runs four reviewers over it (static
