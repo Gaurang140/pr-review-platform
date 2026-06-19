@@ -1,0 +1,42 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# local kind overlay: images built by local/deploy.sh, one replica each,
+# a NodePort so the gateway is reachable on localhost:8080.
+resources:
+  - ../../base
+  - configmap.yaml
+  - gateway-nodeport.yaml
+
+images:
+  - name: gateway
+    newName: pr-reviewer/gateway
+    newTag: local
+  - name: webhook
+    newName: pr-reviewer/webhook
+    newTag: local
+  - name: orchestrator
+    newName: pr-reviewer/orchestrator
+    newTag: local
+  - name: reviewer
+    newName: pr-reviewer/reviewer
+    newTag: local
+  - name: learner
+    newName: pr-reviewer/learner
+    newTag: local
+
+replicas:
+  - name: gateway
+    count: 1
+  - name: webhook
+    count: 1
+  - name: webhook-worker
+    count: 1
+  - name: orchestrator
+    count: 1
+  - name: reviewer
+    count: 1
+  - name: learner
+    count: 1
+  - name: learner-worker
+    count: 1

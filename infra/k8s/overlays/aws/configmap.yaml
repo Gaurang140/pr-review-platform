@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+# non-secret wiring for EKS. set REDIS_URL to the ElastiCache endpoint from
+# `terraform output redis_endpoint`. credentials live in app-secrets.
+data:
+  REDIS_URL: "redis://CHANGE_ME-elasticache-endpoint:6379/0"
+  WEBHOOK_SERVICE_URL: "http://webhook:8001"
+  ORCHESTRATOR_SERVICE_URL: "http://orchestrator:8002"
+  REVIEWER_SERVICE_URL: "http://reviewer:8003"
+  LEARNER_SERVICE_URL: "http://learner:8004"
+  LANGFUSE_HOST: "https://us.cloud.langfuse.com"
+  REVIEW_MODEL: "llama-3.3-70b-versatile"
+  AWS_S3_BUCKET: "ai-code-reviewer-reports"
+  AWS_REGION: "us-east-1"

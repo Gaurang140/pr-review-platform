@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# AWS/EKS overlay: ECR images, the public LoadBalancer + ALB ingress, and the
+# orchestrator autoscaler. To target your own account, run:
+#   kustomize edit set image gateway=<ACCOUNT>.dkr.ecr.us-east-1.amazonaws.com/gateway:latest
+# (repeat per service) or edit the newName values below.
+resources:
+  - ../../base
+  - configmap.yaml
+  - gateway-lb.yaml
+  - ingress.yaml
+  - hpa.yaml
+
+images:
+  - name: gateway
+    newName: 789438508565.dkr.ecr.us-east-1.amazonaws.com/gateway
+    newTag: latest
+  - name: webhook
+    newName: 789438508565.dkr.ecr.us-east-1.amazonaws.com/webhook
+    newTag: latest
+  - name: orchestrator
+    newName: 789438508565.dkr.ecr.us-east-1.amazonaws.com/orchestrator
+    newTag: latest
+  - name: reviewer
+    newName: 789438508565.dkr.ecr.us-east-1.amazonaws.com/reviewer
+    newTag: latest
+  - name: learner
+    newName: 789438508565.dkr.ecr.us-east-1.amazonaws.com/learner
+    newTag: latest

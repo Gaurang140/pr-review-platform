@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: orchestrator
+  name: reviewer
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: orchestrator
+      app: reviewer
   template:
     metadata:
       labels:
-        app: orchestrator
+        app: reviewer
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "8002"
+        prometheus.io/port: "8003"
         prometheus.io/path: "/metrics"
     spec:
       containers:
-        - name: orchestrator
-          image: 789438508565.dkr.ecr.us-east-1.amazonaws.com/orchestrator:latest
+        - name: reviewer
+          image: reviewer:latest
           ports:
-            - containerPort: 8002
+            - containerPort: 8003
           envFrom:
             - configMapRef:
                 name: app-config
@@ -36,24 +36,24 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
-              port: 8002
+              port: 8003
             initialDelaySeconds: 10
             periodSeconds: 30
           readinessProbe:
             httpGet:
               path: /health
-              port: 8002
+              port: 8003
             initialDelaySeconds: 5
             periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: orchestrator
+  name: reviewer
 spec:
   selector:
-    app: orchestrator
+    app: reviewer
   ports:
-    - port: 8002
-      targetPort: 8002
+    - port: 8003
+      targetPort: 8003
   type: ClusterIP

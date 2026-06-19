@@ -3,9 +3,9 @@ import hmac
 import httpx
 from fastapi import FastAPI, Request, HTTPException
 from prometheus_fastapi_instrumentator import Instrumentator
-from .models import settings
+from models import Settings
 
-settings = settings()   
+settings = Settings()   
 app = FastAPI()
 Instrumentator().instrument(app).expose(app)
 

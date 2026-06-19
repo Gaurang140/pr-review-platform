@@ -17,6 +17,6 @@ variable "db_password" {
 
 variable "environment" {
   description = "Deployment environment"
-  type        = string+
+  type        = string
   default     = "staging"
 }

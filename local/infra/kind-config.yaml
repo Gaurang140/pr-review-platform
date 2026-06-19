@@ -1,0 +1,15 @@
+# kind cluster = local replacement for AWS EKS.
+# single node is enough for local dev. extraPortMappings expose the gateway
+# and MinIO console on localhost without needing a cloud LoadBalancer.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: pr-reviewer
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 30080   # gateway NodePort -> http://localhost:8080
+        hostPort: 8080
+        protocol: TCP
+      - containerPort: 30901   # MinIO console NodePort -> http://localhost:9001
+        hostPort: 9001
+        protocol: TCP

@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+httpx
+PyJWT  # github app jwt
+cryptography  # rs256 signing for the jwt
+sqlalchemy[asyncio]
+asyncpg
+pydantic-settings
+prometheus-fastapi-instrumentator
+langgraph
+langfuse  # traces the llm calls
+openai  # groq speaks the openai api

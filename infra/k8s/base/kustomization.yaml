@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# shared workloads. images are bare names (gateway, webhook, ...) so each
+# overlay can point them at local images or ECR. app-config and app-secrets
+# are supplied per environment - the overlay creates the ConfigMap, the
+# Secret is created out of band (sync-secret.sh locally, kubectl on AWS).
+resources:
+  - gateway.yaml
+  - webhook.yaml
+  - webhook-worker.yaml
+  - orchestrator.yaml
+  - reviewer.yaml
+  - learner.yaml
+  - learner-worker.yaml
+  - migration-job.yaml

@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: webhook
+  name: learner
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: webhook
+      app: learner
   template:
     metadata:
       labels:
-        app: webhook
+        app: learner
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "8001"
+        prometheus.io/port: "8004"
         prometheus.io/path: "/metrics"
     spec:
       containers:
-        - name: webhook
-          image: 789438508565.dkr.ecr.us-east-1.amazonaws.com/webhook:latest
+        - name: learner
+          image: learner:latest
           ports:
-            - containerPort: 8001
+            - containerPort: 8004
           envFrom:
             - configMapRef:
                 name: app-config
@@ -36,24 +36,24 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
-              port: 8001
+              port: 8004
             initialDelaySeconds: 10
             periodSeconds: 30
           readinessProbe:
             httpGet:
               path: /health
-              port: 8001
+              port: 8004
             initialDelaySeconds: 5
             periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: webhook
+  name: learner
 spec:
   selector:
-    app: webhook
+    app: learner
   ports:
-    - port: 8001
-      targetPort: 8001
+    - port: 8004
+      targetPort: 8004
   type: ClusterIP

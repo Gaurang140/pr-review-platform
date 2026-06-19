@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: learner-worker
+  name: webhook-worker
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: learner-worker
+      app: webhook-worker
   template:
     metadata:
       labels:
-        app: learner-worker
+        app: webhook-worker
     spec:
       containers:
-        - name: learner-worker
-          image: 789438508565.dkr.ecr.us-east-1.amazonaws.com/learner:latest
-          command: ["celery", "-A", "worker", "worker", "--loglevel=info", "-Q", "learning"]
+        - name: webhook-worker
+          image: webhook:latest
+          command: ["celery", "-A", "worker", "worker", "--loglevel=info", "-Q", "webhook"]
           envFrom:
             - configMapRef:
                 name: app-config
